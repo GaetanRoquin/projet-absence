@@ -1,0 +1,15 @@
+# Dépendances
+node_modules/
+.next/
+
+# Variables d'environnement (JAMAIS versionner !)
+.env
+.env.local
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
