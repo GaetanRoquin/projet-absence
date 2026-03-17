@@ -4,9 +4,6 @@ const ctrl = require('../controllers/absence.controller');
 const { requireFields } = require('../middlewares/validation.middleware');
 
 // GET toutes les absences
-router.get('/', (req, res)=>{
-    res.status(200).json({message:'Routes absence ok !'})
-});
 router.get('/', ctrl.getAll);
 
 // POST créer une absence

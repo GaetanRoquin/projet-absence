@@ -8,32 +8,62 @@ const apiClient = axios.create({
 
 // ---- ABSENCES ----
 export const getAbsences = async () => {
-  const res = await apiClient.get('/absences');
-  return res.data;
+  try {
+    const res = await apiClient.get('/absences');
+    return res.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des absences :", error);
+    throw error;
+  }
 };
 
 // ---- STATISTIQUES ----
 export const getStatsGlobal = async () => {
-  const res = await apiClient.get('/statistiques/global');
-  return res.data;
+  try {
+    const res = await apiClient.get('/statistiques/global');
+    return res.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des statistiques global :", error);
+    throw error;
+  }
 };
 
 export const getHighRisk = async () => {
-  const res = await apiClient.get('/statistiques/high-risk');
-  return res.data;
+  try {
+    const res = await apiClient.get('/statistiques/high-risk');
+    return res.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des statistiques high-risk :", error);
+    throw error;
+  }
 };
 
 export const getByClasse = async () => {
-  const res = await apiClient.get('/statistiques/by-classe');
-  return res.data;
+  try{
+    const res = await apiClient.get('/statistiques/by-classeroom');
+    return res.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des statistiques classeroom :", error);
+    throw error;
+  }
 };
 
 export const getByMatiere = async () => {
-  const res = await apiClient.get('/statistiques/by-matiere');
-  return res.data;
+  try{
+    const res = await apiClient.get('/statistiques/by-subject');
+    return res.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des statistiques subject :", error);
+    throw error;
+  }
 };
 
 export const getMonthly = async () => {
-  const res = await apiClient.get('/statistiques/monthly');
-  return res.data;
+  try{
+    const res = await apiClient.get('/statistiques/monthly');
+    return res.data;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des statistiques monthly :", error);
+    throw error;
+  }
 };

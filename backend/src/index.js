@@ -2,29 +2,29 @@
 require('dotenv').config();
 
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
+
+const app = express();
+const PORT = process.env.PORT || 3001;
 
 // Import des routes
 const absencesRoutes = require('./routes/absence.routes');
 const statsRoutes = require('./routes/stats.routes');
 
-const app = express();
-const PORT = process.env.PORT || 3001;
+// Middleware CORS : autoriser tout pour l'instant
+app.use(cors({
+  origin: 'http://localhost:3000', // frontend
+  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 
 // Middleware pour parser le JSON
 app.use(express.json());
 
-// Autoriser les requêtes du frontend (CORS)
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', 'http://localhost:3001');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  next();
-});
-
 // Déclaration des routes
 app.use('/api/absences', absencesRoutes);
-app.use('/api/stats', statsRoutes);
+app.use('/api/statistiques', statsRoutes);
 
 // Connexion MongoDB puis démarrage du serveur
 const mongoURI = `mongodb://${process.env.MONGO_HOST}:${process.env.MONGO_PORT}/${process.env.MONGO_DATABASE_NAME}`;
