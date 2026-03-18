@@ -16,7 +16,7 @@ export default function LineChartMonthly() {
 
   return (
     <div className='bg-white rounded-xl shadow p-4'>
-      <h2 className='font-bold text-lg mb-4'>Évolution mensuelle des absences</h2>
+      <h2 className='font-bold text-lg text-black mb-4'>Évolution mensuelle des absences</h2>
       <ResponsiveContainer width='100%' height={300}>
         <LineChart data={data}>
           <CartesianGrid strokeDasharray='3 3' />

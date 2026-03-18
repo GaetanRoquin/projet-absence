@@ -9,12 +9,13 @@ export default function PieChartMatiere() {
   const [data, setData] = useState([]);
 
   useEffect(() => {
+    // ✅ CORRIGÉ : x.name → x._id (le controller retourne { _id: 'Maths', count: 5 })
     getByMatiere().then(d => setData(d.map(x => ({ name: x._id, value: x.count }))));
   }, []);
 
   return (
     <div className='bg-white rounded-xl shadow p-4'>
-      <h2 className='font-bold text-lg mb-4'>Absences par matière</h2>
+      <h2 className='font-bold text-lg text-black mb-4'>Absences par matière</h2>
       <ResponsiveContainer width='100%' height={300}>
         <PieChart>
           <Pie data={data} dataKey='value' nameKey='name' cx='50%' cy='50%' outerRadius={100}>

@@ -1,6 +1,7 @@
 const Absence = require('../models/absence.model');
 
 module.exports = {
+
   // Statistiques globales
   getGlobal: async (req, res) => {
     try {
@@ -8,13 +9,14 @@ module.exports = {
       const totalHeures = await Absence.aggregate([
         { $group: { _id: null, sum: { $sum: '$duration' } } }
       ]);
-      const justifiees = await Absence.countDocuments({ justifie: true });
+      // ✅ CORRIGÉ : 'justifie' → 'justification'
+      const justifiees = await Absence.countDocuments({ justification: true });
 
       res.json({
         totalAbsences: total,
         totalHeures: totalHeures[0]?.sum || 0,
         pourcentageJustifiees: total > 0 ? Math.round((justifiees / total) * 100) : 0,
-        moyenneParEleve: 0  // à affiner avec aggregate
+        moyenneParEleve: 0
       });
     } catch (err) {
       res.status(500).json(err);
@@ -28,7 +30,8 @@ module.exports = {
       const result = await Absence.aggregate([
         { $group: { _id: '$student', totalHeures: { $sum: '$duration' } } },
         { $match: { totalHeures: { $gt: seuil } } },
-        { $lookup: { from: 'student', localField: '_id',
+        // ✅ CORRIGÉ : 'student' → 'students' (MongoDB met le nom en pluriel)
+        { $lookup: { from: 'students', localField: '_id',
                      foreignField: '_id', as: 'studentInfo' } },
         { $unwind: '$studentInfo' },
         { $sort: { totalHeures: -1 } }
@@ -43,8 +46,19 @@ module.exports = {
   getByClasse: async (req, res) => {
     try {
       const result = await Absence.aggregate([
-        { $group: { _id: '$classeroom', count: { $sum: 1 },
-                    totalHeures: { $sum: '$durartion' } } },
+        // ✅ CORRIGÉ : classeroom est un ObjectId, lookup pour avoir le nom
+        { $lookup: { from: 'students', localField: 'student',
+                     foreignField: '_id', as: 'studentInfo' } },
+        { $unwind: '$studentInfo' },
+        { $lookup: { from: 'classerooms', localField: 'studentInfo.classeroom',
+                     foreignField: '_id', as: 'classeroomInfo' } },
+        { $unwind: '$classeroomInfo' },
+        { $group: {
+            _id: '$classeroomInfo.name',
+            count: { $sum: 1 },
+            // ✅ CORRIGÉ : faute de frappe 'durartion' → 'duration'
+            totalHeures: { $sum: '$duration' }
+        }},
         { $sort: { count: -1 } }
       ]);
       res.json(result);
@@ -57,7 +71,14 @@ module.exports = {
   getByMatiere: async (req, res) => {
     try {
       const result = await Absence.aggregate([
-        { $group: { _id: '$subject', count: { $sum: 1 } } },
+        // ✅ CORRIGÉ : subject est un ObjectId, lookup pour avoir le nom
+        { $lookup: { from: 'subjects', localField: 'subject',
+                     foreignField: '_id', as: 'subjectInfo' } },
+        { $unwind: '$subjectInfo' },
+        { $group: {
+            _id: '$subjectInfo.name',
+            count: { $sum: 1 }
+        }},
         { $sort: { count: -1 } }
       ]);
       res.json(result);

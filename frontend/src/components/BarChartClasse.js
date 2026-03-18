@@ -12,7 +12,7 @@ export default function BarChartClasse() {
 
   return (
     <div className='bg-white rounded-xl shadow p-4'>
-      <h2 className='font-bold text-lg mb-4'>Absences par classe</h2>
+      <h2 className='font-bold text-lg text-black mb-4'>Absences par classe</h2>
       <ResponsiveContainer width='100%' height={300}>
         <BarChart data={data}>
           <CartesianGrid strokeDasharray='3 3' />

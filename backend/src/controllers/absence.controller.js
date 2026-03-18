@@ -1,10 +1,19 @@
 const Absence = require('../models/absence.model');
+require('../models/student.model');
+require('../models/classeroom.model');
+require('../models/subject.model');
 
 module.exports = {
-  // Récupérer toutes les absences (avec les infos de l'élève)
+
+  // Récupérer toutes les absences (avec les infos de l'élève, sa classe et la matière)
   getAll: async (req, res) => {
     try {
-      const absences = await Absence.find().populate('student', 'firstName lastName');
+      const absences = await Absence.find()
+        .populate({
+          path: 'student',                      // récupère l'élève
+          populate: { path: 'classeroom' }      // puis sa classe à l'intérieur
+        })
+        .populate('subject');                   // récupère la matière
       res.status(200).json(absences);
     } catch (err) {
       res.status(500).json(err);

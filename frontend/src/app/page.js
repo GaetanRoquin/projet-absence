@@ -6,7 +6,6 @@ import AbsencesTable      from '@/components/AbsencesTable';
 import BarChartClasse     from '@/components/BarChartClasse';
 import PieChartMatiere    from '@/components/PieChartMatiere';
 import LineChartMonthly   from '@/components/LineChartMonthly';
-import RiskBadge          from '@/components/RiskBadge';
 
 export default function Dashboard() {
   const { stats, highRisk, loading } = useGlobalStats();
@@ -53,12 +52,6 @@ export default function Dashboard() {
 
       {/* TABLEAU */}
       <AbsencesTable />
-
-      {/* SECTION ÉLÈVES À RISQUE */}
-      <h2 className='text-xl font-bold mt-8 mb-4'>Élèves à surveiller</h2>
-      <div className='flex flex-wrap gap-3'>
-        {highRisk.map(e => <RiskBadge key={e._id} eleve={e} />)}
-      </div>
     </main>
   );
 }
