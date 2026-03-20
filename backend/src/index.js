@@ -12,6 +12,14 @@ const PORT = process.env.PORT || 3001;
 const absencesRoutes = require('./routes/absence.routes');
 const statsRoutes = require('./routes/stats.routes');
 
+
+const studentsRoutes    = require('./routes/student.routes');
+const classeroomsRoutes = require('./routes/classeroom.routes');
+const subjectsRoutes    = require('./routes/subject.routes');
+
+const swaggerUi     = require('swagger-ui-express');
+const swaggerSpec   = require('./swagger');
+
 // Middleware CORS : autoriser tout pour l'instant
 app.use(cors({
   origin: 'http://localhost:3000', // frontend
@@ -21,6 +29,14 @@ app.use(cors({
 
 // Middleware pour parser le JSON
 app.use(express.json());
+
+// Après tes app.use() existants, ajoute :
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+// ...puis dans les app.use() :
+app.use('/api/students',    studentsRoutes);
+app.use('/api/classerooms', classeroomsRoutes);
+app.use('/api/subjects',    subjectsRoutes);
 
 // Déclaration des routes
 app.use('/api/absences', absencesRoutes);
